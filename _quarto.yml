@@ -1,0 +1,70 @@
+project:
+  type: book
+
+book:
+  title: "Семинары по иммуноинформатике"
+  page-footer:
+    left: |
+      Семинары по иммуноинформатике,
+      Антон С.Смирнов.
+    right: |
+      Книга написана с помощью <a href="https://quarto.org/">Quarto</a>
+  author: 
+    name: "Антон С. Смирнов"
+    orcid: "0000-0002-7510-1602"
+    corresponding: true
+    email: "smirnov_as@rsmu.ru"
+    affiliations:
+      - "Пироговский университет"
+      - "МГНЦ им. Н.П. Бочкова"
+  date: today
+  date-format: long
+  page-navigation: true
+  chapters:
+    - index.qmd
+    - intro.qmd 
+    - part: medical_immuno.qmd # links to lectures
+      chapters:
+        - seminars/ngs_interpretation.qmd
+        - seminars/hla_typing.qmd
+    - part: immune_repertours.qmd # about paradigms
+      chapters:
+        - seminars/cellranger.qmd
+        - seminars/seurat.qmd
+    - part: drug_design.qmd # links to lectures
+      chapters:
+        - seminars/vaccines.qmd
+        - seminars/projects.qmd
+        - seminars/antibody.qmd
+        - seminars/antibody_antigene.qmd
+    - summary.qmd
+    - references.qmd
+
+bibliography: references.bib
+search: true
+toc: true
+lightbox: true
+toc-depth: 3
+toc-title: "Оглавление"
+fontsize: 14pt
+linestretch: 1.5
+geometry:
+  - top=10mm
+  - left=20mm
+  - right=20mm
+  - heightrounded
+format:
+  html:
+    theme: cosmo
+    grid:
+      sidebar-width: 350px
+  pdf:
+    documentclass: book
+    pdf-engine: xelatex
+
+
+mainfont: Raleway
+monofont: Raleway
+sansfont: Raleway
+    
+editor: source
