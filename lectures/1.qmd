@@ -1,6 +1,8 @@
 ---
-title: "Интерпретация результатов NGS"
-author: 
+title: "NGS в медицинской иммунологии"
+jupyter: python3
+
+author:
     name: "Смирнов Антон Сергеевич"
     orcid: "0000-0002-7510-1602"
     corresponding: true
@@ -8,32 +10,112 @@ author:
     affiliations:
       - "Пироговский университет"
       - "МГНЦ им. Н.П. Бочкова"
-jupyter: python3
-
-format:
-  revealjs:
-    footer: "Факультет биоинженерии и биоинформатики МГУ"
-    theme: white
-    margin: 0.05  # стандартно 0.1 (10%), уменьшаем до 5%
-    width: 1280
-    height: 720
+date: today
+slide-number: true
+code-fold: false
+fontsize: 40pt
+echo: true
+mermaid-format: png
+format: 
+    revealjs:
+        smaller: true
+        auto-stretch: false
+        margin: 0.05  # стандартно 0.1 (10%), уменьшаем до 5%
+        width: 1920
+        height: 1080
+        slide-number: true
+        progress: true
+        center-title-slide: false
+        logo: images/pirogov_logo.png
+        footer: "Кафедра биоинформатики МБФ"
+        include-in-header:
+          text: |
+            <style>
+            /* Основные списки */
+            .reveal ul,
+            .reveal ol {
+              font-size: 0.95em;
+              line-height: 1.3;
+            }
+            
+            .source-link {
+              position: absolute;
+              bottom: 100px;
+              right: 100px;
+              font-size: 0.6em;
+            }
+            
+            /* Элементы списков */
+            .reveal li {
+              font-size: 0.95em;
+              margin-bottom: 0.5em;
+            }
+            
+            /* Вложенные списки - немного меньше */
+            .reveal ul ul,
+            .reveal ol ol {
+              font-size: 1.2em;
+            }
+            
+            /* Маркеры списков тоже увеличиваем */
+            .reveal ul li::marker {
+              font-size: 0.95em;
+            }
+            
+            .reveal ol li::marker {
+              font-size: 0.95em;
+            }
+            </style>
+    pdf:
+        auto-stretch: false
+        margin: 0.05  # стандартно 0.1 (10%), уменьшаем до 5%
+        documentclass: book
+        pdf-engine: xelatex
+        header-includes: |
+            \usepackage[utf8]{inputenc}
+            \usepackage[american,russian]{babel}
+            \usepackage{hyperref}  
+            \usepackage{unicode-math}
+        slide-number: true
+        smaller: true
+        logo: images/pirogov_logo.png
+        footer: "Кафедра биоинформатики МБФ"
+mainfont: Arial
+monofont: Arial
 ---
+
+## О себе
+
+::: columns
+::: {.column width="50%"}
+![](images/1/I.jpg)
+:::
+
+::: {.column width="50%"}
+Смирнов Антон Сергеевич
+
+- МБФ, медицинская кибернетика`23
+- ассистент кафедры биоинформатики МБФ Пироговского университета
+- руководитель студенческого научного кружка каф.биоинформатики
+- лаборант-исследователь лаборатории эпигенетики ожирения и диабета + специалист по информационным технологиям МГНЦ РАН
+
+![](images/1/qr-code.png){width=20%}
+:::
+:::
+
+
 
 ## План лекции
 
 1.  Место NGS в медицине
-
 2.  Болезни иммунитета и методы их диагностики
-
 3.  Пайплайн обработки
-
-4.  Форматы данных (bam, vcf)
-
-5.  Аннотация vcf
-
-6.  Критерии патогенности вариантов
-
-7.  Алгоритмы по интерпретации результатов NGS и инструменты для анализа
+    1.  Форматы данных (sam, vcf)
+    2.  Аннотация vcf
+4.  Интерпретация результатов
+    1.  Критерии патогенности вариантов
+    2.  Алгоритмы по интерпретации результатов NGS и инструменты для анализа
+5.  HLA-типирование
 
 # Место NGS в медицине
 
@@ -43,11 +125,8 @@ format:
 ## Диагностика
 
 1.  Физикальная (опрос, осмотр, пальпация, перкуссия, аускультация)
-
 2.  Функциональная (ЭКГ, спирометрия, ЭхоКГ и т.д.)
-
 3.  Лабораторная (анализы крови, мочи, кала и т.д.)
-
 4.  Инструментальная (УЗИ, рентгендиагностика, МРТ и т.д.)
 
 ## Диагноз
@@ -78,18 +157,31 @@ format:
 :::
 :::
 
+::: callout-important
+### NB!
+
 ```{=html}
  <p style="color: red;">NGS не является золотым стандартом диагностики!</p>
 ```
+:::
+
+## Виды секвенирования
+
+-   Таргетное (панельное) - секвенирование ограниченного числа локусов (панели)
+
+-   Полноэкзомное - секвенирование всех (почти всех) белок-кодирующих участков генома
+
+-   Полногеномное
+
 ## Стоимость NGS
 
 ::: columns
 ::: {.column width="40%"}
-![](images/1/1_Sequencing_cost_per_Mb.jpg){width="557"}
+![](images/1/1_Sequencing_cost_per_Mb.jpg)
 :::
 
 ::: {.column width="60%"}
-![](images/1/1_real_costs.png){width="720"}
+![](images/1/1_real_costs.png)
 :::
 :::
 
@@ -102,6 +194,10 @@ format:
 :::
 
 ```{mermaid}
+%%| echo: false
+%%| fig-width: 14
+%%| fig-height: 7
+%%| fig-responsive: false
 mindmap
 Болезни иммунной<br>системы
     (Иммунодефициты)
@@ -121,7 +217,7 @@ mindmap
         Под воздействием факторов среды
 ```
 
-## Первичные иммунодефициты {style="margin: 0; padding: 0; font-size: 1.5rem;"}
+## Первичные иммунодефициты
 
 1.  Комбинированные Т- и В-клеточные иммунодефициты; 
 
@@ -144,8 +240,714 @@ mindmap
 ## Аутоиммунные и аутовоспалительные заболевания {style="margin: 0; padding: 0; font-size: 1.75rem;"}
 
 |                |                                               Аутовоспалительные                                                |                                 Аутоиммунные                                 |
-|:------------:|:----------------------------------:|:--------------------:|
+|:----------------:|:------------------------------:|:--------------------:|
 | **Моногенные** |                                    CAPS;FMF;HIDS;<br>TEAPS;PAPA;Синдром Блау                                    |                               ALPS;IPEX;APS-1                                |
 | **Полигенные** | Болезнь Крона;<br>Неспецифический язвенный колит;<br>Псориатический артрит;<br>Ювенильный идиопатический артрит | Целиакия;<br>Болезнь Грейвса;<br>Сахарный диабет 1 типа;<br>Болезнь Аддисона |
 
 Промежуточные болезни: псориаз, анкилозирующий спондилит, реактивный артрит, болезнь Бехчета.
+
+## Эпигенетика и иммунодефициты {.scrollable}
+
+Хроматинопатии - группа наследственных заболеваний, затрагивающая структуру и функцию хроматина, что приводит к мультисистемным нарушениям.
+
+::: columns
+::: {.column width="45%"}
+### Синдром Кабуки
+
+Варианты в генах KMT2D (гистон-лизин N-метилтрансфераза), KDM6A (лизин-специфичная деметилаза 6А)
+
+![](images/1/kabuki.jpg)
+:::
+
+::: {.column width="45%"}
+### Синдром Сотоса
+
+Варианты в гене NSD1 (транскрипционный ко-регулятор гистоновой метилтрансферазы)
+
+![](images/1/Sotos_syndrome_extracted.png)
+:::
+:::
+
+## NGS диагностика
+
+```{=html}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Arial';
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .list-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        ol {
+            padding-left: 20px;
+        }
+        
+        li {
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .item-1 {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #4caf50;
+        }
+        
+        .item-2 {
+            background-color: #fffde7;
+            color: #f57f17;
+            border-left: 4px solid #ffeb3b;
+        }
+        
+        .item-3 {
+            background-color: #f5f5f5;
+            color: #000;
+            text-decoration: line-through;
+            border-left: 4px solid #9e9e9e;
+        }
+    </style>
+</head>
+<body>
+    <div class="list-container">
+        <ol>
+            <li class="item-1">Первичные иммунодефициты</li>
+            <li class="item-2">Аутоимунные и аутовоспалительные заболевания</li>
+            <li class="item-3">Аллергические заболевания</li>
+        </ol>
+    </div>
+</body>
+</html>
+```
+## Статистика с Human Phenotype Ontology
+
+24 августа 2025 г.
+
+| Термин                        | Ассоциации с болезнями | Ассоциации с генами |
+|-----------------------------|-----------------------|--------------------|
+| **Immunodeficiency**          | 246                    | 223                 |
+| **Cellular immunodeficiency** | 21                     | 39                  |
+| **Humoral immunodeficiency**  | 5                      | 3                   |
+| **Combined immunodeficiency** | 44                     | 41                  |
+
+# Пайплайн обработки
+
+## Общая схема {.scrollable}
+
+```{mermaid}
+%%| echo: false
+%%| fig-width: 19
+%%| fig-height: 10
+%%| fig-responsive: false
+stateDiagram-v2
+    direction LR
+    Sequencing --> DataProcessing
+    
+    state DataProcessing {
+        direction LR
+        [*] --> Demultiplexing
+        Demultiplexing --> QualityTrimming
+        QualityTrimming --> Alignment
+        Alignment --> BAMProcessing
+        
+        state BAMProcessing {
+            [*] --> Sorting
+            Sorting --> DuplicateMarking
+            DuplicateMarking --> Indexing
+            Indexing --> [*]
+        }
+    }
+    
+    DataProcessing --> VariantCalling
+    
+    state VariantCalling {
+        [*] --> SNP_Indel_Calling
+        SNP_Indel_Calling --> VariantFiltering
+        VariantFiltering --> Annotation
+    }
+    
+    VariantCalling --> AnalysisInterpretation
+    
+    state AnalysisInterpretation {
+        [*] --> VariantPrioritization
+        VariantPrioritization --> PathwayAnalysis
+        PathwayAnalysis --> ClinicalCorrelation
+    }
+    
+    AnalysisInterpretation --> ReportGeneration
+    ReportGeneration --> [*]
+
+```
+
+## Формат sam {.scrollable}
+
+![](images/1/sam_format_example.jpg)
+
+::: callout-tip
+### Подробнее
+
+[Спецификация](https://samtools.github.io/hts-specs/SAMv1.pdf)
+:::
+
+## BAM и CRAM
+
+::: columns
+::: {.column width="45%"}
+### BAM
+
+1.  SAM файл, поля которого сжаты с использованием BGZF
+2.  Сжатие происходит за счет особой кодировки и компоновки полей
+3.  Наиболее универсальный и популярный формат хранения выравниваний
+:::
+
+::: {.column width="45%"}
+### CRAM
+
+1.  SAM файл, поля которого сжаты с использованием gzip/bzip2
+2.  Хранит только различия образца от референсного генома
+3.  При компрессии/декомпрессии необходим референсный геном
+4.  По оценкам на 40-50% эффективнее BAM в сжатии без потерь
+:::
+:::
+
+::: callout-note
+### Совместимость
+
+Все три формата совместимы между собой и поддерживаются основным ПО для медицинской генетики.
+:::
+
+## VCF {.scrollable}
+
+![](images/1/vcf_format.png)
+
+::: callout-tip
+### Подробнее
+
+1.  VCF также имеет свою бинарную, сжатую версию - BCF
+2.  [Спецификация](https://samtools.github.io/hts-specs/VCFv4.2.pdf)
+:::
+
+## Дьявол координатных систем {.scrollable}
+
+![](images/1/genomic_coordinate.png)
+
+| Format/library | Type    |
+|----------------|---------|
+| BED            | 0-based |
+| GTF            | 1-based |
+| GFF            | 1-based |
+| SAM            | 1-based |
+| BAM            | 0-based |
+| VCF            | 1-based |
+| BCF            | 0-based |
+| Wiggle         | 1-based |
+| GenomicRanges  | 1-based |
+
+::: source-link
+[Источник](https://tidyomics.com/blog/2018/12/09/2018-12-09-the-devil-0-and-1-coordinate-system-in-genomics/)
+:::
+
+## Нормализация вариантов
+
+1.  Приведение к биаллельной записи
+2.  Парсимония - представление вариантов минимальным количеством нуклеотидов без уменьшения длины какого-либо аллеля до 0.
+3.  Левостороннее выравнивание - запись координаты варианта как можно "левее" (т.е с наименьшим положением на хромосоме).
+
+## Фильтрация вариантов (техническая)
+
+::: callout-warning
+### NB!
+
+1.  Учитывайте тип образца, тип и технологию секвенирования, версию референса
+:::
+
+1.  FILTER == PASS
+2.  Фильтрация по VAF - для герминальных вариантов окрестность 0, 0.5, 1. Промежуточные значения может означать контаминацию
+3.  Фильтрация по глубине - 1 или 5 процентиль, меньше 10. Малопредставленные варианты могут означать артефакт секвенирования или мозаичный вариант.
+4.  Фильтрация по чёрным спискам
+
+## Аннотация вариантов
+
+Аннотация вариантов
+
+:   Процесс присоединения контекста (клинический, функциональный, популяционной и пр.) к варианту
+
+1.  Генетический контекст (ген, транскрипт, положение в гене, классификация варианта)
+2.  Функциональный контекст (функция гена, задействованные сигнальные и метаболические пути)
+3.  Популяционный контекст (популяуционные частоты аллеля в различных популяциях)
+4.  Клинический контекст (известные заболевания, синдромы, ассоциированные с геном, вариантом)
+5.  Вычислительный контекст (предсказание эффекта варианта)
+
+## Программы-аннотаторы
+
+1.  VEP
+2.  snpEff
+3.  ANNOVAR
+4.  OpenCravat
+
+::: callout-note
+### NB!
+
+Программы требуют большого места на дисковом хранилище для кэша и предсохраненных баз данных
+:::
+
+# Источники данных
+
+## Генетический контекст
+
+-   NCBI
+
+    -   RefSeq
+
+    -   MANE Select
+
+-   Ensembl
+
+## Функциональный контекст
+
+-   GO
+
+-   KEGG
+
+-   Reactome
+
+## Популяционный контекст
+
+-   GnomAD
+
+-   1000G
+
+-   RuSeq
+
+-   RuExac
+
+-   База частот ЦСП ФМБА
+
+## Клинический контекст
+
+-   OMIM
+
+-   HGMD
+
+-   LOVD
+
+-   ClinVar
+
+## Вычислительный контекст
+
+-   Предикторы, основанные на правилах (SIFT, PolyPhen-2)
+
+-   Метапредикторы (Meta-EA, CADD)
+
+-   Предикторы, основанные на машинном обучении (SAV-Pred, SpliceAI, AlphaMissense)
+
+# Клиническая интерпретация вариантов
+
+1.  [Рекомендации ACMG](https://www.acmg.net/docs/standards_guidelines_for_the_interpretation_of_sequence_variants.pdf)
+2.  [Российские рекомендации](https://www.medgen-journal.ru/jour/article/view/642?locale=ru_RU)
+
+## Категоризация вариантов
+
+```{=html}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Arial';
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .list-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        ol {
+            padding-left: 20px;
+        }
+        
+        li {
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .item-1 {
+            background-color: #FF0000;
+            color: #000;
+            border-left: 4px solid #FF0000;
+        }
+        
+        .item-2 {
+            background-color: #FFA500;
+            color: #000;
+            border-left: 4px solid #FFA500;
+        }
+        
+        .item-3 {
+            background-color: #808080;
+            color: #000;
+            border-left: 4px solid #9e9e9e;
+        }
+        .item-4 {
+            background-color: #00FF00;
+            color: #000;
+            border-left: 4px solid #00FF00;
+        }
+        .item-5 {
+            background-color: #008000;
+            color: #000;
+            border-left: 4px solid #008000;
+        }
+    </style>
+</head>
+<body>
+    <div class="list-container">
+        <ol>
+            <li class="item-1">Патогенные варианты (P)</li>
+            <li class="item-2">Вероятно патогенные варианты (LP)</li>
+            <li class="item-3">Варианты с неизвестной клинической значимостью (VUS)</li>
+            <li class="item-4">Вероятно доброкачественные варанты (LB)</li>
+            <li class="item-5">Доброкачественные варианты (B)</li>
+        </ol>
+    </div>
+</body>
+</html>
+```
+## Критерии категоризации
+
+[Полезный инструмент](http://calc.generesearch.ru/)
+
+::: columns
+::: {.column width="45%"}
+### Типы правил
+1. Очень сильные - PVS (только P)
+2. Сильные - PS (P и B)
+3. Средние - PM (только P)
+4. Поддерживающие - PP (P и B)
+5. Автономные - SA (stand-alone, только B)
+
+:::
+
+::: {.column width="45%"}
+### Категории правил
+
+1.  Популяционные данные
+2.  Вычислительные и предсказательные данные
+3.  Функциональные данные
+4.  Данные по сегрегации
+5.  Данные по *de novo*
+6.  Аллельные данные
+7.  Данные из других источников
+8.  Прочее
+:::
+:::
+
+## Правила по категоризации
+
+::: {.acmg-table}
+
+| Классификация | Комбинация критериев |
+|----------------|----------------------|
+| **Pathogenic** | • **PVS1** + (≥1 **PS** OR ≥2 **PM** OR 1 **PM** + 1 **PP** OR ≥2 **PP**) <br/> • ≥2 **PS** <br/> • **PS1-4** + (≥3 **PM** OR 2 **PM** + ≥2 **PP** OR 1 **PM** + ≥4 **PP**) |
+| **Likely Pathogenic** | • **PVS1** + 1 **PM** <br/> • **PS1-4** + 1-2 **PM** <br/> • **PS1-4** + ≥2 **PP** <br/> • ≥3 **PM** <br/> • 2 **PM** + ≥2 **PP** <br/> • 1 **PM** + ≥4 **PP** |
+| **Benign** | • **BA1** (Stand-alone) <br/> • ≥2 **BS1-4** |
+| **Likely Benign** | • **BS1-4** + **BP1-7** <br/> • ≥2 **BP1-7** |
+| **Uncertain Significance** | • Other criteria not met <br/> • Conflicting benign/pathogenic criteria |
+
+:::
+
+<style>
+.acmg-table table {
+  font-size: 0.9em;
+  width: 95%;
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+
+.acmg-table th {
+  background-color: #2c3e50;
+  color: white;
+  font-weight: bold;
+  padding: 15px;
+  text-align: center;
+  font-size: 1.1em;
+}
+
+.acmg-table td {
+  padding: 18px;
+  border: 1px solid #ddd;
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.acmg-table tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.acmg-table tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.acmg-table td:first-child {
+  font-weight: bold;
+  color: #2c3e50;
+  width: 20%;
+  text-align: center;
+}
+
+.acmg-table td:last-child {
+  width: 80%;
+}
+
+/* Цветовое кодирование для классификаций */
+.acmg-table tr:nth-child(1) td:first-child { color: #e74c3c; } /* Pathogenic - красный */
+.acmg-table tr:nth-child(2) td:first-child { color: #e67e22; } /* Likely Pathogenic - оранжевый */
+.acmg-table tr:nth-child(3) td:first-child { color: #27ae60; } /* Benign - зеленый */
+.acmg-table tr:nth-child(4) td:first-child { color: #2ecc71; } /* Likely Benign - светло-зеленый */
+.acmg-table tr:nth-child(5) td:first-child { color: #7f8c8d; } /* Uncertain - серый */
+
+/* Стили для кодов критериев */
+.acmg-table strong {
+  color: #2980b9;
+  font-weight: 800;
+}
+
+.reveal .slides section .acmg-table {
+  max-height: 85vh;
+  overflow-y: auto;
+}
+</style>
+
+# Фильтрация вариантов (биологическая)
+
+## Генетический контекст
+
+![](images/1/variants_consequences.svg)
+
+## Популяционный контекст 
+
+Базы данных: gnomAD, 1000G и пр.
+
+1. для аутосомно-доминантных заболеваний частота аллеля не должна превышать 0,01%,
+2. для аутосомно-рецессивных заболеваний — 0,5%,
+3. для доминантных X-сцеплённых — 0,01%,
+4. для рецессивных X-сцеплённых — 0,3%.
+
+Собственная база данных: если в вашей собственной БД вариант встречается слишком часто, скорее всего он не является причинным.
+
+
+## Клинический контекст
+
+1. Составление виртуальных панелей, наиболее соответствующих фенотипу пациента (HPO)
+2. Поиск вариантов с известной клинической значимостью (HGMD, ClinVar, LOVD).
+
+::: callout-important
+### NB!
+Всегда перепроверяйте уже опубликованную информацию и перечитывайте статьи! Опубликовано может быть что угодно, а ответственность на пациенте на вас.
+:::
+
+## Функциональный и вычислительный контекст
+
+1. Функциональный контекст используется только для обоснования эффектов найденных вариантов
+2. Вычислительные данные обладают на данный момент слабой доказательной силой и используются только тогда, когда надо "натянуть" нужный вариант на нужную категорию.
+
+## UCSC Genome Browser
+
+[ucsc mirror](https://genome-euro.ucsc.edu/cgi-bin/hgTracks?db=hg38&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=chr18%3A46029903%2D48029902&hgsid=407468675_sQm0rolarfiDtomxvjrV2QVrHG7C)
+
+![](images/1/ucsc.png)
+
+## igv 
+
+![](images/1/igv.png)
+
+## Заключение по результатам анализа
+
+**Обязательные пункты**
+
+1. Патогенные варианты
+2. Вероятно патогенные варианты
+3. Варианты с неизвестной клинической значимостью
+
+**Необязательные пункты**
+
+1. Вторичные находки
+2. Структурные варианты и варианты числа копий
+3. Экспансии повторов
+
+
+# HLA-типирование
+
+процесс определения аллелей главного комплекса гистосовметсимости (для человека)
+
+## Главный комплекс гистосовместимости
+
+::: columns
+::: {.column width="45%"}
+комплекс тесно связанных генетических локусов, расположенных на коротком плече 6-ой хромосомы (6р), а также их белковых продуктов, отвечающих за развитие иммунного ответа и синтез трансплантационных антигенов.
+:::
+
+:::{.column width="45%"}
+![](images/1/mhc_genetic_map.jpg)
+:::
+:::
+
+## Строение молекул MHC
+
+![](images/1/MHCI-and-MHCII.png){width=150%}
+
+::: source-link
+[Источник](https://www.geeksforgeeks.org/biology/difference-between-mhc-class-1-and-mhc-class-2-proteins/)
+:::
+
+
+## Функция молекул MHC
+
+- Обеспечение процессинга и презентации антигенных пептидов - индукторов и мишеней иммунного ответа;
+
+- Обеспечение взаимодействия клеток
+
+- Распознавание собственных, измененных собственных и чужеродных клеток; запуск и реализация иммуного ответа против носителей генетической информации
+
+- Поддержание иммунологической толерантности (в том числе во время беременности);
+
+- Участие в селекции Т-лимфоцитов;
+
+- Создание генетического разнообразия и обеспечение выживаемости вида.
+
+## Свойства локуса
+
+- Высокая полиморфность
+- Высокая степень гетерозиготности
+- Кодоминантное наследование
+
+## Номенклатура IGMT
+
+![](images/1/igmt.png){width=200%}
+
+## Cui bono?
+
+1. **Трансплантологи**
+2. Диагностика некоторых аутоиммунных заболеваний (болезнь Бехтерева)
+
+## Федеральный регистр доноров костного мозга
+
+![](images/1/bonemarrow_registry.png)
+![](images/1/qr_bone.png){width=20%}
+
+## Методы типирования
+
+1. Серотипирование (антителами)
+2. ПЦР-SSO, ПЦР-SSOP
+3. Сэнгер
+4. NGS
+5. Длинные прочтения
+
+## Особенности для биоинформатики
+
+1. Малая степень отличий между аллелями (1-2 нуклеотида)
+2. Высокая степень полиморфности
+
+## Инструменты
+
+1. seq2HLA 
+2. Optitype
+3. HLA-LA
+4. HISAT-genotype
+5. **...**
+
+## seq2HLA {.scrollable}
+
+![](images/1/seq2HLA.webp)
+
+::: source-link
+[Источник](https://genomemedicine.biomedcentral.com/articles/10.1186/gm403)
+:::
+
+## Optitype
+
+::: callout-tip
+Хорошее генотипирование объясняет происхождение большинства прочтений
+:::
+
+![](images/1/optitype.png){width=200%}
+
+::: source-link
+[Источник](https://academic.oup.com/bioinformatics/article/30/23/3310/206910)
+:::
+
+## Графовые методы {.scrollable}
+
+![](images/1/pog.webp)
+::: source-link
+[Источник](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1388-2)
+:::
+
+## Итоги
+
+1. Иммуноинформатика имеет прикладное значение в медицинской генетике
+2. Интерпретация результатов NGS осуществляется по специальных рекомендациях
+3. HLA-типирование требует особых алгоритмов выравнивания.
