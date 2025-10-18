@@ -23,6 +23,8 @@ format:
         margin: 0.05  # стандартно 0.1 (10%), уменьшаем до 5%
         width: 1920
         height: 1080
+        mainfont: Arial
+        monofont: Arial
         slide-number: true
         progress: true
         center-title-slide: false
@@ -80,8 +82,8 @@ format:
         smaller: true
         logo: images/pirogov_logo.png
         footer: "Кафедра биоинформатики МБФ"
-mainfont: Arial
-monofont: Arial
+        mainfont: Raleway
+        monofont: Raleway
 ---
 
 ## О себе
@@ -785,7 +787,7 @@ stateDiagram-v2
 
 ## Генетический контекст
 
-![](images/1/variants_consequences.svg)
+![](images/1/variants_consequences.png)
 
 ## Популяционный контекст 
 
@@ -921,7 +923,7 @@ stateDiagram-v2
 
 ## seq2HLA {.scrollable}
 
-![](images/1/seq2HLA.webp)
+![](images/1/seq2HLA.png)
 
 ::: source-link
 [Источник](https://genomemedicine.biomedcentral.com/articles/10.1186/gm403)
@@ -941,7 +943,7 @@ stateDiagram-v2
 
 ## Графовые методы {.scrollable}
 
-![](images/1/pog.webp)
+![](images/1/pog.png)
 ::: source-link
 [Источник](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-018-1388-2)
 :::

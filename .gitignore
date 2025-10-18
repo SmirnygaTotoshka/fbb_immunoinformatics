@@ -47,12 +47,12 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
-
+_book/**
 /env/
 /.quarto/
-_book/**/*.html
-_book/search.json
 lectures/**/*.html
 lectures/*_files/**
 _book/*_libs/**
 github_token.txt
+**/.ipynb_checkpoints/
+publish.yml

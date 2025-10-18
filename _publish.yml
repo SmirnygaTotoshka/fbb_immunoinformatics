@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: 5e32b989-2cc6-43a0-9afa-be7e62d54aec
+      url: 'https://stotoshka.quarto.pub/fbb_immunoinf'

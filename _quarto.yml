@@ -23,6 +23,7 @@ book:
   chapters:
     - index.qmd
     - intro.qmd 
+    - lectures.qmd
     - part: medical_immuno.qmd # links to lectures
       chapters:
         - seminars/ngs_interpretation.qmd
@@ -40,14 +41,20 @@ book:
     - summary.qmd
     - references.qmd
 
-bibliography: references.bib
-search: true
+  search: true
+  repo-url: https://github.com/SmirnygaTotoshka/fbb_immunoinformatics
+  repo-branch: main
+  repo-actions: [issue]
+  downloads: [pdf]
+  
 toc: true
 lightbox: true
 toc-depth: 3
 toc-title: "Оглавление"
 fontsize: 14pt
 linestretch: 1.5
+
+
 geometry:
   - top=10mm
   - left=20mm
