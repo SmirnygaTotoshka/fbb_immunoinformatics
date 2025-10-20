@@ -17,7 +17,7 @@
 start %JAVA_CMD% ... --genomeServerURL=https://tools.epigenetic.ru/igv/genomes.txt --genome=https://tools.epigenetic.ru/igv/genomes/hg19.genome
 ```
 
-3.  Любой табличный редактор на ваш вкус. Можно Excel.
+3.  [DB Browser for SQLite](https://sqlitebrowser.org/)
 
 ## Пример заключения
 
@@ -96,7 +96,9 @@ start %JAVA_CMD% ... --genomeServerURL=https://tools.epigenetic.ru/igv/genomes.t
 
 ## Пациент №2
 
-Данные. Скрины из выписок представлены ниже
+Новорожденный мальчик с неонатального скрининга.
+
+[Данные](https://disk.yandex.ru/d/xkSfG10qhprvXg). Скрины из выписок представлены ниже
 
 ![](images/pat2_1.png)
 
@@ -108,7 +110,9 @@ start %JAVA_CMD% ... --genomeServerURL=https://tools.epigenetic.ru/igv/genomes.t
 
 ## Пациент №3
 
-Данные
+Новорожденный мальчик с неонатального скрининга.
+
+[Данные](https://disk.yandex.ru/d/GR2yrSqbjh9ITA)
 
 | TREC            | KREC            | SMN1 |
 |-----------------|-----------------|------|
