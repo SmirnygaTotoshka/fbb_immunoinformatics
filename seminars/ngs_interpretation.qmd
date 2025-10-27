@@ -160,12 +160,8 @@ start %JAVA_CMD% ... --genomeServerURL=https://tools.epigenetic.ru/igv/genomes.t
 
 ## Пациент №3
 
-<<<<<<< HEAD
 Новорожденный мальчик с неонатального скрининга.
-=======
-Новорожденный мальчик с неонатального скрининга
 
->>>>>>> 9091e1e05a6574c41d13ec0788e9aec4e39d6153
 
 [Данные](https://disk.yandex.ru/d/GR2yrSqbjh9ITA)
 
