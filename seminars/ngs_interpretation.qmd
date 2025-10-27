@@ -212,29 +212,3 @@ start %JAVA_CMD% ... --genomeServerURL=https://tools.epigenetic.ru/igv/genomes.t
 | CD3-CD16+CD56+ Lym (NK-cells)                     | 581       | кл/мкл   |
 
 : Субпопуляции лимфоцитов
-
-## Пациент №4 (на дом)
-
-Данные
-
-Из выписок. Подозрение на первичный иммунодефицит. Иммунологическиме тесты не проводились. Анализ MLPA:
-
-Локус 22q11: DGS-регион / Число копий LCR22-A n=2; LCR22-B n=2; LCR22-C n=2; LCR22-D n=2; LCR22-E n=2; LCR22-F n=2; LCR22-G n=2
-
-методом MLPA с использованием набора реактивов P250-B2 DiGeorge probemix (MRC-Holland) проведен анализ числа копий генов локуса 22q11 (DGS-регион), изменения в котором приводят к развитию синдрома ДиДжорджи и велокардиофациального синдрома. Делеций/дупликаций не выявлено.
-
-Примечание:
-
--   LCR22-A: гены CLTCL1, HIRA, CDC45, CLDN5, GP1BB, TBX1, TXNRD2, DGCR8.
-
--   LCR22-B: гены ZNF74, KLHL22, MED15 (PCQAP).
-
--   LCR22-C: гены SNAP29, LZTR1.
-
--   LCR22-D: гены HIC2, PPIL2, TOP3B.
-
--   LCR22-E: гены RTDR1, GNAZ, RTDR1, RAB36.
-
--   LCR22-F: гены SMARCB1.
-
--   LCR22-G: ген SNRPD3.
