@@ -1,0 +1,634 @@
+---
+title: "Анализ иммунных репертуаров"
+jupyter: python3
+
+author:
+    name: "Смирнов Антон Сергеевич"
+    orcid: "0000-0002-7510-1602"
+    corresponding: true
+    email: "smirnov_as@rsmu.ru"
+    affiliations:
+      - "Пироговский университет"
+      - "МГНЦ им. Н.П. Бочкова"
+date: today
+slide-number: true
+code-fold: false
+fontsize: 40pt
+echo: true
+mermaid-format: png
+format: 
+    revealjs:
+        grid: 
+          margin-width: 50px
+        smaller: true
+        auto-stretch: false
+        width: 1920
+        height: 1080
+        page-layout: full
+        mainfont: Arial
+        monofont: Arial
+        slide-number: true
+        progress: true
+        center-title-slide: false
+        logo: images/pirogov_logo.png
+        footer: "Кафедра биоинформатики МБФ"
+        include-in-header:
+          text: |
+            <style>
+            /* Основные списки */
+            .reveal ul,
+            .reveal ol {
+              font-size: 0.95em;
+              line-height: 1.3;
+            }
+            
+            .source-link {
+              position: absolute;
+              bottom: 2%;
+              right: 2%;
+              font-size: 0.6em;
+            }
+            
+            /* Элементы списков */
+            .reveal li {
+              font-size: 0.95em;
+              margin-bottom: 0.5em;
+            }
+            
+            /* Вложенные списки - немного меньше */
+            .reveal ul ul,
+            .reveal ol ol {
+              font-size: 1.2em;
+            }
+            
+            /* Маркеры списков тоже увеличиваем */
+            .reveal ul li::marker {
+              font-size: 0.95em;
+            }
+            
+            .reveal ol li::marker {
+              font-size: 0.95em;
+            }
+            </style>
+    pdf:
+        auto-stretch: false
+        margin: 0.05  # стандартно 0.1 (10%), уменьшаем до 5%
+        documentclass: book
+        pdf-engine: xelatex
+        header-includes: |
+            \usepackage[utf8]{inputenc}
+            \usepackage[american,russian]{babel}
+            \usepackage{hyperref}  
+            \usepackage{unicode-math}
+        slide-number: true
+        smaller: true
+        logo: images/pirogov_logo.png
+        footer: "Кафедра биоинформатики МБФ"
+        mainfont: Raleway
+        monofont: Raleway
+---
+
+## Базовые определения
+
+Иммунный репертуар (adaptive immune receptor repertoir)
+
+:   совокупность всех антиген-распознающих рецепторов клеток адаптивного иммунитета
+
+Клонотип
+
+:   группа клеток с одинаковыми антиген-распознающими рецепторами
+
+Участок, определяющий комплементарность
+
+:   гипервариабельные участки антитела, отвечающие за взаимодействие с антигеном
+
+Универсальный молекулярный идентификатор
+
+:   короткая случайная нуклеотидная последовательность, лигируемая к исследуемым молекулам до этапа амплификации
+
+## Строение рецепторов
+
+::: columns
+::: {.column width="50%"}
+### TCR
+
+![](images/2/tcr.png)
+
+::: source-link
+[TCR](https://github.com/antigenomics/repseq-annotation-tutorial/blob/master/slides/slides.pdf)
+:::
+:::
+
+::: {.column width="50%"}
+### BCR
+
+![](images/2/bcr.png)
+:::
+:::
+
+## Источники данных
+
+```{mermaid}
+%%| echo: false
+%%| fig-width: 8
+%%| fig-height: 6
+%%| fig-responsive: false
+graph TD
+    A[Material] --> B[Bulk]
+    A --> C[Single-cell]
+    B --> D[gDNA]
+    B --> E[mRNA]
+    C --> F[RNA]
+```
+
+## ДНК или РНК
+
+::: columns
+::: {.column width="50%"}
+### ДНК
+
+1.  Легко выделяется
+2.  Стабильна, в отличие от РНК
+3.  Не нужен этап обратной транскрипции
+4.  Количество ДНК пропорционально количеству рецепторов
+5.  Требует высокой начальной концентрации и более высокое сродство к праймерам
+:::
+
+::: {.column width="50%"}
+### РНК
+
+1.  Требуют меньшей начальной концентрации
+2.  Больше информации за счет измерянного уровня транскрипции генов
+3.  Нет сигнала от интронов
+4.  Можно полностью прочитать CDR
+5.  Менее стабильно, ОТ дает доп. ошибки, тяжело и дорого выделять и транспортировать
+:::
+:::
+
+::: source-link
+[10.7150/thno.61390](https://www.thno.org/v11p8945.htm)
+:::
+
+## Rapid Amplification of cDNA Ends (RACE)
+
+::: columns
+::: {.column width="40%"}
+### Синтез кДНК
+
+![](images/2/race1.jpg){width="150%"}
+:::
+
+::: {.column width="60%"}
+### RACE реакция
+
+![](images/2/race2.jpg){width="150%"}
+:::
+:::
+
+::: notes
+Schematic outline of the 5′-RACE approach. (**A**) cDNA synthesis. The biotin-labelled oligo(dT) primer is bound to avidin-coupled polystyrene-beads. Using these beads, mRNA is isolated and first strand cDNA synthesis starts directly on the beads (step 1). The intrinsic activity of the MMLV RT adds 2–4 C residues to the 3′-end of the newly synthesised cDNA. This region could base pair with the 3′-most part (containing G or rG residues) of the CapFinder A or B primer, which in turn functions as template for the RT. This includes a known sequence complementary to the CapFinder primer sequence at the 3′-end of the newly synthesised cDNA. If only minute amounts of material are available, the cDNA could be preamplified in a LA PCR reaction using 5′-Primer and 3′-Primer (steps 2 and 3). After the PCR reaction the biotinylated product is captured and washed and could now be used in a 5′-RACE–PCR reaction (step 4). (**B**) 5′-RACE reaction. For the 5′-RACE reaction either non-amplified CapFinder cDNA \[see (A) step 1\] or PCR amplified cDNA \[see (A) step 4\] could be used. The 5′-RACE reaction is performed with a gene-specific reverse primer (GSRP) and 5′-Primer, which represents the 5′-most 27 nt of the CapFinder primers. The PCR amplificate represents in both cases the 5′-region of the gene of interest surrounded by the 5′-Primer and gene-specific reverse primer (GSRP).
+:::
+
+::: source-link
+[10.1093/nar/28.22.e96](https://pmc.ncbi.nlm.nih.gov/articles/PMC113888/)
+:::
+
+## UMI
+
+![](images/2/umi.png){width="200%"}
+
+## Инструменты анализа IR-seq
+
+| Tools            | File format | TCR/BCR | Run                | Programming languages | Maximum input value | Sequence quality | UMIs | Clustering |
+|--------|--------|--------|--------|--------|--------|--------|--------|--------|
+| IMGT/HighV-QUEST | FASTA       | TCR/BCR | Online             | \-                    | 150000              | NO               | NO   | Yes        |
+| IgBLAST          | FASTA       | TCR/BCR | Online/stand-alone | C++                   | \<1000              | NO               | NO   | NO         |
+| VDJPipe          | FASTA       | TCR/BCR | Online/stand-alone | C++                   | None                | Yes              | Yes  | NO         |
+| MiXCR            | FASTA/FASTQ | TCR/BCR | stand-alone        | Java                  | None                | Yes              | NO   | Yes        |
+| ImmuneDB         | FASTA/FASTQ | TCR/BCR | stand-alone        | Python                | None                | Yes              | Yes  | NO         |
+| VDJtools         | FASTA/FASTQ | TCR     | stand-alone        | Java/Groovy           | None                | NO               | Yes  | Yes        |
+| VDJServer        | FASTA/FASTQ | TCR/BCR | Online             | \-                    | None                | Yes              | Yes  | Yes        |
+| VDJdb            | FASTA/FASTQ | TCR     | stand-alone        | Java                  | None                | Yes              | NO   | NO         |
+| TRIg             | FASTA       | TCR/BCR | stand-alone        | Perl                  | None                | NO               | NO   | NO         |
+| Vidjil           | FASTA/FASTQ | TCR/BCR | stand-alone        | C++/Java              | None                | NO               | NO   | Yes        |
+
+::: source-link
+[10.7150/thno.61390](https://www.thno.org/v11p8945.htm)
+:::
+
+## MiXCR
+
+![](images/2/mixcr_total.png)
+
+::: callout-note
+### Референсные аллели
+
+<https://vdj.online/library>
+:::
+
+::: source-link
+<https://mixcr-cn.readthedocs.io/en/latest/quickstart.html>
+:::
+
+## VDJtools {.scrollable}
+
+![](images/2/vdjtools.png)
+
+::: source-link
+<https://vdjtools-doc.readthedocs.io/en/master/intro.html>
+:::
+
+## Базовая статистика
+
+1.  Описательная статистика о клонах
+2.  Гомеостаз клонов
+3.  Пропорция N наиболее представленных клонов
+4.  Spectratype
+
+## Описательная статистика от VDJtools {.scrollable}
+
+| НАзвание столбца   | Описание                                                                                      |
+|--------------------------|----------------------------------------------|
+| sample_id          | Идентификатор образца                                                                         |
+| count              | Количество прочтений в образце                                                                |
+| diversity          | Количествоклонотипов в образце                                                                |
+| mean_frequency     | Средняя частота встречаемости клонотипа                                                       |
+| geomean_frequency  | Геометрическое средняя частота встречаемости клонотипа                                        |
+| nc_diversity       | Число некодирующих клонотипов                                                                 |
+| nc_frequency       | Частота прочтений, принадлежащих некодирующим клонотипам                                      |
+| mean_cdr3nt_length | Средняя длина нуклеотидной последовательности CDR3, взвешанная на частоту клонотипа           |
+| mean_insert_size   | Средняя длина случайных вставок в CDR3                                                        |
+| mean_ndn_size      | Средняя длина нуклеотидной последовательности между V и J в CDR3                              |
+| convergence        | Среднее число уникальных нуклеотидных CDR3, кодирующих одну аминокислотную последовательность |
+
+## Гомеостаз клонов
+
+![](images/2/clonal_homeostasis.png){width="1024"}
+
+::: source-link
+[10.4049/jimmunol.1600005](https://pubmed.ncbi.nlm.nih.gov/27183615/)
+:::
+
+## Spectratype
+
+![](images/2/spectratype-1.png)
+
+::: source-link
+[immunoarch docs](https://immunarch.com/reference/spectratype.html)
+:::
+
+## V-J connections
+
+![](images/2/basic-fancyvj.png)
+
+## Сравнение репертуаров {.scrollable}
+
+Нормализованный коэф. перекрытия
+
+:   $overlap(X,Y) = \frac{|X\cap Y|}{min(|X|,|Y|)}$
+
+Мера Жаккарда (она же Танимото, открыта Гилбертом)
+
+:   $J(X,Y) = \frac{|X\cap Y|}{|X\cup Y|}$
+
+Расхождение Йенсена-Шеннона
+
+:   $$\begin{equation}\begin{split} JSD (P,Q) = 0.5 * D(P||M) + 0.5 * D(Q||M) \\ & M = 0.5*(P+Q) \\ & D_{KL}(P||Q) = \sum_i{P_i*log(\frac{P_i}{Q_i})} \end{split}\end{equation}$$
+
+Индекс Морисито-Хорна
+
+:   $C_H = \frac{2 *\sum_{i=1}^{S}{x_i*y_i}}{(\frac{\sum_{i=1}^{S}{x_i^2}}{X^2} + \frac{\sum_{i=1}^{S}{y_i^2}}{Y^2})X*Y}$
+
+:   -   S - число уникальных репертуаров
+
+    -   x,y - количство раз, при котором i-ый репертуар встретился в образцах X, Y
+
+    -   X,Y - размер репертуара
+
+    -   В знаменателе в скобочках сумма двух индексов Симпсона (мера расхождения)
+
+## Оценка разнообразия
+
+Энтропия Шеннона
+
+:   $H(X) = \sum_{i=1}^{N}{P_i*log_2(P_i)}$
+
+Мера Симпсона
+
+:   $D(X) = \frac{\sum_{i=1}^{S}{x_i^2}}{X^2}$
+
+Индекс Chao
+
+:   $S_1 = S_{obs}  = \frac{F_1^2}{2*F_2}$
+
+## Кластеризация TCR
+
+$$
+TCRdist(X,Y) = \sum_{i}^N{min(g,g-BLOSUM62(x_i,y_i))}
+$$
+
+Включает для расчета CDR3 и петлю между CDR2, CDR3. g = 4 для петли и g = 8 для CDR3
+
+Для кластеризации используют, как правило, иеррахические методы
+
+::: source-link
+[TCRdist](https://pmc.ncbi.nlm.nih.gov/articles/PMC5616171/#S1)
+
+[tcrdist3](https://pmc.ncbi.nlm.nih.gov/articles/PMC9719034/#S1)
+:::
+
+## Соматический гипермутагенез
+
+| 5-mer                      | Freq | A    | C    | G    | T    |
+|----------------------------|------|------|------|------|------|
+| AC[A]{style="color:red"}AC | 83   | 0.24 | 0.48 | 0.28 | \-   |
+| GC[C]{style="color:red"}GT | 1742 | 0.22 | 0.12 | 0.66 | \-   |
+| CC[G]{style="color:red"}TC | 12   | 0.35 | 0.52 | \-   | 0.13 |
+| TC[T]{style="color:red"}CC | 516  | 0.32 | 0.54 | 0.14 | \-   |
+
+::: source-link
+[10.3389/fimmu.2013.00358](https://www.frontiersin.org/journals/immunology/articles/10.3389/fimmu.2013.00358/full)
+:::
+
+::: notes
+Мутации начинаются вблизи 5'-конца V-D-J-экзона и распространяются на 1-2 т.п.н. 3'-конец J-C интрона и C-ген, как правило, не затрагиваются \[2, 3\].
+
+В нормальном процессе соматического гипермутирования иммуноглобулинов мутации возникают в вариабельном домене экспрессированных тяжелых и легких цепей, но не в их константной области.
+
+Вносимые соматическим гипермутированием мутации представлены преимущественно точковыми мутациями.
+
+Частота мутаций оценивается как порядка 10⁻³ – 10⁻⁴ на пару оснований за клеточное поколение: это приводит к мутированию до 20% нуклеотидов в участке длиной около 1-2 т.п.н., который охватывает V-D-J-экзон \[1\].
+
+В процессе соматического гипермутирования в перестроенных генах иммуноглобулинов (V-J и V-D-J) обнаруживается большое количество двуцепочечных разрывов \[2, 3\], но не в C-генах.
+
+Были описаны горячие точки соматического гипермутирования.
+:::
+
+## Частота изотипов
+
+-   IGHA1
+
+-   IGHA2
+
+-   IGHD
+
+-   IGHE
+
+-   IGHG1
+
+-   IGHG2
+
+-   IGHG3
+
+-   IGHG4
+
+-   IGHM
+
+## Эволюционный анализ антител {.scrollable}
+
+![](images/2/evolution.png)
+
+::: source-link
+<https://www.pnas.org/doi/10.1073/pnas.1617959114>
+:::
+
+## Анализ иммунной динамики {.scrollable}
+
+![](images/2/immune_dynamics.png)
+
+::: source-link
+<https://www.pnas.org/doi/10.1073/pnas.1617959114>
+:::
+
+## Идентификация мотивов
+
+![](images/2/pssm.jpg)
+
+## 10x Genomics {.scrollable}
+
+![](images/2/single-cell.png)
+
+::: source-link
+[10.7150/thno.61390](https://www.thno.org/v11p8945.htm)
+:::
+
+## 3\` и 5\` библиотеки
+
+::: columns
+::: {.column width="50%"}
+### 3
+
+![](images/2/3.png)
+:::
+
+::: {.column width="50%"}
+### 5
+
+![](images/2/5.png)
+:::
+:::
+
+## CITE-seq {.scrollable}
+
+Epitope + Gene Expression
+
+![](images/2/cite-seq.png){width="120%" width="100%"}
+
+::: source-link
+<https://www.biorender.com/template/cite-seq-cellular-indexing-of-transcriptomes-epitopes-by-sequencing-workflow>
+:::
+
+## TEA-seq
+
+Transcriptome+Epitope+ATAC
+
+![](images/2/tea-seq.png)
+
+## CellRanger {.scrollable}
+
+::: columns
+::: {.column width="50%"}
+-   Подходит только для библиотек, полученных при помощи 10x Chromium
+
+-   Автоматически определяет версию химии 10x ⇒ не нужно прописывать координаты баркода / UMI в прочтениях (это сильно облегчает работу)
+
+-   Основан на STAR, а потому очень требовательный к ресурсам (1 Тб дискового пространства, 128 Гб RAM, 16 ядер)
+
+-   Очень долго работает (один образец может рассчитываться 12 часов)
+
+-   Умеет работать с данными CITE-Seq и большим количеством иных модификаций scRNA-Seq-эксперимента
+
+-   Может вернуть .bam-файл с картированием, если попросить его это сделать
+:::
+
+::: {.column width="50%"}
+![](images/2/cellranger.png)
+:::
+:::
+
+## Kallisto + bustools
+
+-   Подходит для большого числа различных библиотек (в основном 10x Chromium, но не только). BUS расшифровывается как barcode \| UMI \| sequence, поэтому подойдут практически любые UMI-based методы
+
+-   kallisto \| bustools основан на псевдовыравниваниях с использованием kallisto, поэтому он не требовательный к железу
+
+-   Работает, как правило, в несколько раз быстрее, чем Cell Ranger
+
+-   Необходимо впрямую прописывать координаты баркода, UMI и последовательности на прочтениях.
+
+-   Чуть менее user-friendly, чем Cell Ranger
+
+-   Умеет работать с CITE-Seq и некоторыми другими протоколами Не возвращает выравнивание!
+
+## GenomicRanges
+
+![](images/2/granges.png){width="120%"}
+
+## Операции с GRanges {.scrollable}
+
+::: columns
+::: {.column width="50%"}
+![](images/2/granges_operations2.png)
+:::
+
+::: {.column width="50%"}
+![](images/2/granges_operations1.png)
+:::
+:::
+
+## SummarizedExperiment {.scrollable}
+
+![](images/2/summarized_experiment.png)
+
+## Seurat
+
+![](images/2/Slide9.png)
+
+## Scanpy {.scrollable}
+
+![](images/2/anndata_scanpy.png){width="120%"}
+
+## Препроцессинг
+
+-   Фильтрация
+
+    -   Пустых капель (дроплетов)
+
+    -   Дуплетов (капель с несколькими (2) клетками)
+
+    -   Высокой экспрессией мтДНК
+
+-   Нормализация
+
+    -   Логарифимирование
+
+    -   scTransform (Seurat)
+
+-   Устранение батч-эффектов (вычитание остатков регрессии на сопутствующий фактор)
+
+-   Снижение размерности
+
+    -   feature selection (отбор самых вариабельных генов)
+
+    -   dim reduction
+
+## PCA
+
+![](images/2/pca.jpg)
+
+## t-SNE
+
+``` pseudocode
+Data: набор данных X = {x1, x2, …, xn},
+параметр функции потерь: перплексия Perp,
+Параметры оптимизации: количество итераций T, скорость обучения η, момент α(t).
+Result: представление данных Y(T) = {y1, y2, …, yn} (в 2D или 3D).
+begin
+    вычислить попарное сходство pj|i c перплексией Perp (используя формулу 1)
+    установить pij = (pj|i + pi|j)/2n
+    инициализировать Y(0) = {y1, y2, …, yn} точками нормального распределения (mean=0, sd=1e-4)
+    for t = 1 to T do
+        вычислить сходство точек в пространстве отображения qij (по формуле 4)
+        вычислить градиент δCost/δy (по формуле 5)
+        установить Y(t) = Y(t-1) + ηδCost/δy + α(t)(Y(t-1) - Y(t-2))
+    end
+end
+```
+
+::: source-link
+<https://habr.com/ru/articles/267041/>
+:::
+
+## UMAP
+
+::: columns
+::: {.column width="50%"}
+![](images/2/umap_yes.png)
+
+A new algorithm, called uniform manifold approximation and projection (UMAP) has been recently published and is claimed to **preserve as much of the local and more of the global data structure than t-SNE, with a shorter run time**.
+:::
+
+::: {.column width="50%"}
+![](images/2/umap_no.png)
+
+We show that UMAP with random initialization preserves global structure as poorly as t-SNE with random initialization, while t-SNE with informative initialization performs as well as UMAP with informative initialization. Hence, contrary to the claims of Becht et al., **their experiments do not demonstrate any advantage of the UMAP algorithm per se**, but rather warn against using random initialization.
+:::
+:::
+
+## Графовые подходы {.scrollable}
+
+::: columns
+::: {.column width="50%"}
+![](images/2/louvain.png)
+:::
+
+::: {.column width="50%"}
+$$
+H = \frac{1}{2m}*\sum_c{e_c - \gamma*\frac{K_c^2}{2m}}
+$$
+
+-   m - общее число рёбер в графе
+
+-   e - актуальное число ребер в сообществе с
+
+-   $\gamma$ - параметр, определяющий разрешение
+
+-   K - сумма степеней узлов в сообществе с
+:::
+:::
+
+![](images/2/leiden_louvain.png)
+
+::: source-link
+[10.1038/s41598-019-41695-z](https://www.nature.com/articles/s41598-019-41695-z#Sec2)
+:::
+
+## AIRR Communnity
+
+![](images/2/airr_comm.png)
+
+## AIRR Standards
+
+![](images/2/airr1.jpg)
+
+::: source-link
+<https://www.ncbi.nlm.nih.gov/books/NBK586961/>
+:::
+
+## Итоги {.scrollable}
+
+![](images/2/final.jpg)
+
+1.  Для секвенирования иммунных репертуаров может быть использована как ДНК, так и РНК. Может быть отсеквенировано все вместе (bulk) или одиночные клетки (single-cell)
+2.  Основные ответы на вопросы:
+    1.  Состав и родство клонотипов
+    2.  Схожесть иммунных репертуаров
+    3.  Динамика изменнений репертуара и клеточных типов
+
+## Полезные ссылки
+
+1.  <https://www.youtube.com/watch?v=RW7Afv5S47M>
+2.  <https://www.youtube.com/watch?v=88LH7Ge0lRo>
+3.  <https://www.youtube.com/watch?v=iEZ9g8ctbgU>
+4.  <https://www.youtube.com/watch?v=6UEHdyxRZtw&list=PLjKdf6AHvR-HU0jeaa4kOtaoYrDTskOGD&index=6>
+5.  <https://bioconductor.org/books/3.12/OSCA/>

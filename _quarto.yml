@@ -30,7 +30,7 @@ book:
         - seminars/hla_typing.qmd
     - part: immune_repertours.qmd # about paradigms
       chapters:
-        - seminars/cellranger.qmd
+        - seminars/immunoarch.qmd
         - seminars/seurat.qmd
     - part: drug_design.qmd # links to lectures
       chapters:
