@@ -1,0 +1,426 @@
+---
+title: "Компьютерное конструирование вакцин"
+jupyter: python3
+
+author:
+    name: "Смирнов Антон Сергеевич"
+    orcid: "0000-0002-7510-1602"
+    corresponding: true
+    email: "smirnov_as@rsmu.ru"
+    affiliations:
+      - "Пироговский университет"
+      - "МГНЦ им. Н.П. Бочкова"
+date: today
+slide-number: true
+code-fold: false
+fontsize: 40pt
+echo: true
+mermaid-format: png
+format: 
+    revealjs:
+        grid: 
+          margin-width: 50px
+        smaller: true
+        auto-stretch: true
+        width: 1920
+        height: 1080
+        page-layout: full
+        mainfont: Arial
+        monofont: Arial
+        slide-number: true
+        progress: true
+        center-title-slide: false
+        logo: images/pirogov_logo.png
+        footer: "Кафедра биоинформатики МБФ"
+        include-in-header:
+          text: |
+            <style>
+            /* Основные списки */
+            .reveal ul,
+            .reveal ol {
+              font-size: 0.95em;
+              line-height: 1.3;
+            }
+            
+            .source-link {
+              position: absolute;
+              bottom: 2%;
+              right: 2%;
+              font-size: 0.6em;
+            }
+            
+            /* Элементы списков */
+            .reveal li {
+              font-size: 0.95em;
+              margin-bottom: 0.5em;
+            }
+            
+            /* Вложенные списки - немного меньше */
+            .reveal ul ul,
+            .reveal ol ol {
+              font-size: 1.2em;
+            }
+            
+            /* Маркеры списков тоже увеличиваем */
+            .reveal ul li::marker {
+              font-size: 0.95em;
+            }
+            
+            .reveal ol li::marker {
+              font-size: 0.95em;
+            }
+            </style>
+    pdf:
+        auto-stretch: false
+        margin: 0.05  # стандартно 0.1 (10%), уменьшаем до 5%
+        documentclass: book
+        pdf-engine: xelatex
+        header-includes: |
+            \usepackage[utf8]{inputenc}
+            \usepackage[american,russian]{babel}
+            \usepackage{hyperref}  
+            \usepackage{unicode-math}
+        slide-number: true
+        smaller: true
+        logo: images/pirogov_logo.png
+        footer: "Кафедра биоинформатики МБФ"
+        mainfont: Raleway
+        monofont: Raleway
+---
+
+# Введение {style="text-align: center;"}
+
+## Базовые определения
+
+Вакцина
+
+:   биологический продукт, который можно использовать для безопасной индукции иммунного ответа, который обеспечивает защиту от инфекции и/или заболевания при последующем воздействии патогена.
+
+Иммунный ответ
+
+:   сложная многокомпонентная, кооперативная реакция иммунной системы организма, индуцированная чужеродным антигеном и направленная на его элиминацию
+
+Адъювант
+
+:   вспомогательное вещество, которое усиливает действие основного компонента (усиливает иммунный ответ)
+
+## Вклад вакцинации
+
+![](images/3/vaccine_impact.png){fig-align="center"}
+
+::: source-link
+[10.1038/s41577-020-00479-7](https://doi.org/10.1038/s41577-020-00479-7)
+:::
+
+## Виды вакцин
+
+![](images/3/vaccine_types.png){fig-align="center"}
+
+::: source-link
+[10.3389/fimmu.2021.733418](https://doi.org/10.3389/fimmu.2021.733418)
+:::
+
+## Существующие подходы
+
+![](images/3/trad_vs_reverse.png){fig-align="center"}
+
+## Сложность
+
+::: columns
+::: {.column width="50%"}
+### Традиционные подходы
+
+![](images/3/vaccine_timeline.png){fig-align="center"}
+:::
+
+::: {.column width="50%"}
+### Современные подходы
+
+![](images/3/covid_timeline.png){fig-align="center"}
+:::
+:::
+
+::: source-link
+[10.1038/d41586-020-03626-1](https://doi.org/10.1038/d41586-020-03626-1)
+:::
+
+## Обратная вакционология {.scrollable}
+
+![](images/3/reverse_vaccinology.png){fig-align="center"}
+
+::: source-link
+[10.3390/vaccines10111844](https://doi.org/10.3390/vaccines10111844)
+:::
+
+## Примерный пайплайн
+
+1.  Анализ структуры возбудителя
+
+2.  Анализ генома, транскриптома, протеома возбудителя.
+
+3.  Поиск потенциальных антигенов
+
+4.  Анализ эволюции возбудителя
+
+5.  Поиск Т- и В-клеточных эпитопов
+
+6.  Дизайн вакцины (тип, состав)
+
+7.  Молекулярное моделирование
+
+8.  Предсказание свойств вакцины (ф-х, иммуногенность, безопасность)
+
+9.  Предсказание ответа на вакцину
+
+# Базы данных {style="text-align: center;"}
+
+## Immune Epitope Database
+
+![](images/3/iedb.png){fig-align="center"}
+
+::: source-link
+<https://www.iedb.org/>
+:::
+
+## VDJdb
+
+![](images/3/vdjdb.png){fig-align="center"}
+
+::: source-link
+<https://vdjdb.cdr3.net/>
+:::
+
+## McPAS-TCR
+
+![](images/3/mcpas.png){fig-align="center"}
+
+::: source-link
+<https://friedmanlab.weizmann.ac.il/McPAS-TCR/>
+:::
+
+## PDB
+
+![](images/3/pdb.png){fig-align="center"}
+
+::: source-link
+<https://www.rcsb.org/>
+:::
+
+## ATLAS
+
+![](images/3/atlas.png){fig-align="center"}
+
+::: source-link
+<https://atlas.wenglab.org/web/index.php>
+:::
+
+## SAbDab
+
+![](images/3/sabdab.png){fig-align="center"}
+
+::: source-link
+<https://opig.stats.ox.ac.uk/webapps/sabdab-sabpred/sabdab>
+:::
+
+## Structural Database of Allergenic Proteins
+
+![](images/3/sdap.png){fig-align="center"}
+
+::: source-link
+<https://fermi.utmb.edu/>
+:::
+
+## WHO Allergen
+
+![](images/3/who_allergen.png){fig-align="center"}
+
+::: source-link
+<https://www.allergen.org/>
+:::
+
+## AllFam
+
+![](images/3/all_fam.png){fig-align="center"}
+
+::: source-link
+<https://www.meduniwien.ac.at/allfam/>
+:::
+
+# Аналитические инструменты {style="text-align: center;"}
+
+## Предсказание эпитопов
+
+```{mermaid}
+%%| echo: false
+%%| fig-width: 8
+%%| fig-height: 6
+%%| fig-responsive: false
+graph TD
+    A[Эпитопы] --> B[T-клеточные эпитопы]
+    A --> C[B-клеточные эпитопы]
+    
+    B --> D[MHC I класс]
+    B --> E[MHC II класс]
+    
+    D --> F[Процессинг протеасомой]
+    D --> G[Связывание с MHC I]
+    
+    E --> I[Связывание с MHC II]
+    
+    C --> J[Линейные эпитопы]
+    C --> K[Конформационные эпитопы]
+    
+```
+
+## Основные методы
+
+-   Статистический анализ
+
+    -   Поиск мотивов связывания
+
+    -   Весовые матрицы (PSSM, SMM)
+
+-   Машинное обучение
+
+    -   Простые модели (наивный Байес, SVM)
+
+    -   Глубокое обучение (полносвязные НС, CNN, RNN, LLM и пр.)
+
+## Используемые фичи
+
+-   Sequence-Based
+
+    -   one-hot
+
+    -   blosum62
+
+    -   Языковые эмбеддинги, подпоследовательности
+
+    -   Физико-химические дескрипторы
+
+-   Structure-Based
+
+    -   молекулярные фингерпринты
+
+    -   взаимные координаты (расстояния) атомов, остатков
+
+    -   графовые представления трехмерной структуры
+
+    -   3-мерные дескрипторы
+
+## IEDB-AR {.scrollable}
+
+| Категория       | Название        | Тип обновления  | Ключевые особенности                                                                                     | Назначение                                                                                                    |
+|-----------|-----------|-----------|--------------------|---------------------|
+| T cell          | TepiTool        | Новая программа | Интерактивный и простой в использовании инструмент для иммунологов                                       | Предсказание T-клеточных эпитопов                                                                             |
+|                 | MHC-NP          | Новая программа | Использует данные о связывании и элюции лигандов для обучения модели                                     | Предсказание естественно процессированных лигандов для MHC I класса                                           |
+|                 | MHCII-NP        | Новая программа | Использует информацию о мотивах в наборе данных по элюции лигандов из IEDB                               | Предсказание естественно процессированных лигандов для MHC II класса                                          |
+|                 | Immunogenicity  | Новая программа | Использует свойства и позиции аминокислот для предсказания иммуногенности                                | Предсказание иммуногенности для эпитопов MHC I класса                                                         |
+|                 | CD4EpiScore     | Новая программа | Комбинирует предсказания алгоритмов иммуногенности и связывания с MHC                                    | Предсказание реактивности CD4 T-клеток в человеческой популяции                                               |
+|                 | Deimmunization  | Новая программа | Предсказывает неиммуногенныерегионы на основе сниженного связывания с набором референсных аллелей MHC II | Выявление иммуногенных регионов и предложение замен аминокислот для снижения иммуногенности                   |
+| B cell / T cell | LYRA            | Новая программа | Простой и быстрый предиктор структуры антител и TCR                                                      | Шаблонное 3D моделирование структур B- и T-клеточных рецепторов                                               |
+| B cell          | BepiPred2.0     | Новая версия    | Обучение на наборе данных конформационных эпитопов с использованием алгоритма случайного леса            | Предсказание линейных B-клеточных эпитопов                                                                    |
+|                 | DiscoTope2.0    | Новая версия    | Новые определения пространственного соседства и поверхностной экспозиции                                 | Предсказание дисконтинуальных B-клеточных эпитопов                                                            |
+| Analysis tools  | RATE            | Новая программа | Определяет HLA-рестрикцию путем генерации матрицы субъектов и данного иммунного ответа                   | Определение аллельной рестрикции для эпитопов на основе данных иммунного ответа от HLA-типированных субъектов |
+|                 | ImmunomeBrowser | Новая программа | Задаваемые пользователем эпитопы и белки-источники                                                       | Агрегация и отображение иммунного ответа из гетерогенных данных эпитопов на белки-источники                   |
+|                 | Cluster2.0      | Переработано    | Множественные методы кластеризации и визуализация                                                        | Группировка и визуализация пептидов, схожих по последовательности                                             |
+
+::: source-link
+[10.1093/nar/gkz452](https://doi.org/10.1093/nar/gkz452)
+:::
+
+## Протеасома
+
+::: columns
+::: {.column width="50%"}
+![](images/3/proteasome.png){fig-align="center"}
+:::
+
+::: {.column width="50%"}
+![](images/3/proteasome_tools.png){fig-align="center"}
+:::
+:::
+
+::: source-link
+[10.1093/bioinformatics/btab628](https://doi.org/10.1093/bioinformatics/btab628)
+:::
+
+## Принцип формирования выборок
+
+![](images/3/sample_constract.png){fig-align="center"}
+
+::: source-link
+[10.1093/bioinformatics/btab628](https://doi.org/10.1093/bioinformatics/btab628)
+:::
+
+## Эпитоп-MHC
+
+::: columns
+::: {.column width="50%"}
+### 1 класс
+
+-   NetMHCpan
+
+-   DeepMHCI
+
+-   MHCflurry
+
+-   MixMHCpred
+:::
+
+::: {.column width="50%"}
+### 2 класс
+
+-   NetMHCIIpan
+
+-   DeepMHCII
+
+-   DeepSeqPanII
+:::
+:::
+
+## MHC псевдопоследовательности
+
+> For constructing the *NetMHCIIpan* method, MHC class II molecules were represented by a pseudo sequence consisting of amino acid residues important for peptide binding. Amino acid residues comprising the pseudo sequence were defined as having their side chains pointing towards the peptide and being within 4.0 Å of the peptide-binding core in one or more of the MHC class II structures (including HLA-DR, HLA-DP and HLA-DQ molecules) available in the PDB. The MHC molecules were aligned using the PyMOL molecular viewer and interacting residue positions extracted according to the distance criterion. Among the interacting residues, only those found to be polymorphic across the sequences of MHC molecules used for the training of the method were considered. The final pseudo sequence is composed of 15 residues from the alpha chain and 19 residues from the beta chain.
+
+::: source-link
+[10.1007/s00251-013-0720-y](https://doi.org/10.1007/s00251-013-0720-y)
+:::
+
+## TCR-epitope
+
+-   MixTCRpred 
+
+-   epiTCR
+
+-   NetTCR
+
+-   TITAN
+
+-   ERGO-II
+
+-   TCRex
+
+-   **TCR-Pred**
+
+## Молекулярные фингерпринты
+
+## ![](images/3/mol_fingerprints.png)
+
+::: source-link
+[10.1016/j.csbj.2021.07.032](https://doi.org/10.1016/j.csbj.2021.07.032)
+:::
+
+## BCR-эпитоп
+
+-   DiscoTope
+
+-   GraphBepi
+
+-   SEMA
+
+-   BepiPred-3.0
+
+## Интерпретируемость
+
+![](images/3/ml_interpret.png){fig-align="center"}
